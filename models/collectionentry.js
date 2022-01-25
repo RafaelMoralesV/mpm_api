@@ -13,11 +13,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.User, {
+        foreignKey: 'userId',
+        as: 'user',
+      });
     }
   }
   CollectionEntry.init({
     user_id: DataTypes.INTEGER,
     card_id: DataTypes.INTEGER,
+    stock: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'CollectionEntry',

@@ -15,10 +15,15 @@ module.exports = {
           model: 'Users',
           key: 'id',
         },
+        onDelete: 'CASCADE',
       },
       cardId: {
         allowNull: false,
         type: Sequelize.INTEGER,
+      },
+      stock: {
+        type: Sequelize.INTEGER,
+        defaultValue: 1,
       },
       createdAt: {
         allowNull: false,
