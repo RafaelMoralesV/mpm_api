@@ -6,6 +6,9 @@ import {Sequelize} from 'sequelize';
 
 import {Model} from 'sequelize';
 
+const bcrypt = require('bcrypt');
+const PASSWORD_SALT_ROUNDS = 11;
+
 interface UserAttributes {
   id: number,
   name: string,
@@ -29,6 +32,9 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       // define association here
       // this.hasMany()
     }
+    async checkPassword(password) {
+      return bcrypt.compare(password, this.password);
+    }
   }
   User.init({
     id: {type: DataTypes.INTEGER, primaryKey: true},
@@ -38,6 +44,13 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
   }, {
     sequelize,
     modelName: 'User',
+  });
+
+  User.beforeSave(async (instance) => {
+    if (instance.changed('password')) {
+      const hash = await bcrypt.hash(instance.password, PASSWORD_SALT_ROUNDS);
+      instance.set('password', hash);
+    }
   });
   return User;
 };
