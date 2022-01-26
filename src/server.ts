@@ -18,13 +18,11 @@ app.get('/', (req: Request, res: Response) => {
 app.post('/login', (req: Request, res: Response) => {
   const {username, password}: {username:string, password:string} = req.body;
 
-  const user = db.User.findAll({
+  db.User.findAll({
     where: {
       name: username,
     },
-  });
-
-  console.log(user);
+  }).then((user: any) => console.log(user));
 
   res.send(`Username: ${username}\tPassword:${password}`);
 });
