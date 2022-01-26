@@ -4,11 +4,22 @@
 
 import {Sequelize} from 'sequelize';
 
-const {
-  Model,
-} = require('sequelize');
+import {Model} from 'sequelize';
+
+interface UserAttributes {
+  id: number,
+  name: string,
+  email: string,
+  password: string,
+}
+
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
-  class User extends Model {
+  class User extends Model<UserAttributes> implements UserAttributes {
+    id!: number;
+    name!: string;
+    email!: string;
+    password!: string;
+
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -20,6 +31,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     }
   }
   User.init({
+    id: {type: DataTypes.INTEGER, primaryKey: true},
     name: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,

@@ -4,11 +4,23 @@
 
 import {Sequelize} from 'sequelize';
 
-const {
-  Model,
-} = require('sequelize');
+import {Model} from 'sequelize';
+
+interface CollectionEntryAttributes {
+  id: number,
+  userId: number,
+  cardId: string,
+  stock: number,
+}
+
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
-  class CollectionEntry extends Model {
+  class CollectionEntry extends Model<CollectionEntryAttributes>
+    implements CollectionEntryAttributes {
+    id!: number;
+    userId!: number;
+    cardId!: string;
+    stock!: number;
+
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -23,8 +35,9 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     }
   }
   CollectionEntry.init({
-    user_id: DataTypes.INTEGER,
-    card_id: DataTypes.INTEGER,
+    id: {type: DataTypes.INTEGER, primaryKey: true},
+    userId: DataTypes.INTEGER,
+    cardId: DataTypes.UUID,
     stock: DataTypes.INTEGER,
   }, {
     sequelize,

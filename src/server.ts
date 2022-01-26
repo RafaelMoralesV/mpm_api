@@ -1,4 +1,6 @@
 import express, {Express, Request, Response} from 'express';
+import db from './models';
+
 
 const app: Express = express();
 
@@ -14,10 +16,30 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.post('/login', (req: Request, res: Response) => {
-  const username: string = req.body.username;
-  const password: string = req.body.password;
+  const {username, password}: {username:string, password:string} = req.body;
+
+  const user = db.User.findAll({
+    where: {
+      name: username,
+    },
+  });
+
+  console.log(user);
 
   res.send(`Username: ${username}\tPassword:${password}`);
+});
+
+app.post('/register', (req: Request, res: Response) => {
+  const {username, password, email}:
+  {username:string, password:string, email:string} = req.body;
+
+  db.User.create({
+    name: username,
+    password: password,
+    email: email,
+  });
+
+  res.send('OK');
 });
 
 app.listen(3000, () => console.log('Listening on Port 3000'));
