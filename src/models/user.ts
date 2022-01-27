@@ -6,7 +6,7 @@ import {Sequelize} from 'sequelize';
 
 import {Model} from 'sequelize';
 
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 const PASSWORD_SALT_ROUNDS = 11;
 
 interface UserAttributes {
@@ -32,7 +32,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       // define association here
       // this.hasMany()
     }
-    async checkPassword(password) {
+    async checkPassword(password: string) {
       return bcrypt.compare(password, this.password);
     }
   }

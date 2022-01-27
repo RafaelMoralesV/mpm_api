@@ -22,9 +22,11 @@
     "@types/morgan": "^1.9.3",
     "@types/validator": "^13.7.1",
     "axios": "^0.25.0",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.1",
     "dotenv": "^14.3.2",
     "express": "^4.17.2",
+    "express-jwt": "^6.1.0",
     "jsonwebtoken": "^8.5.1",
     "mariadb": "^2.5.5",
     "morgan": "^1.10.0",
@@ -34,6 +36,8 @@
     "typescript": "^4.5.5"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/express-jwt": "^6.0.4",
     "@types/jsonwebtoken": "^8.5.8",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",

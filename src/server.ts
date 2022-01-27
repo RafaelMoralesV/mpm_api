@@ -1,10 +1,9 @@
 import express, {Express, Request, Response} from 'express';
 import db from './models';
+import jwt from 'express-jwt';
 
-require('dotenv').config;
+import AuthController from './config/auth';
 
-const jwt = require('koa-jwt');
-const {apiSetCurrentUser} = require('config/auth.js');
 const app: Express = express();
 
 // parse application/x-www-form-urlencoded
@@ -50,7 +49,14 @@ app.post('/register', (req: Request, res: Response) => {
 
 // de aqui en adelante los endpoints
 // requieren un JSON Web TOKEN de un usuario logueado.
-app.use(jwt({secret: process.env.JWT_SECRET, key: 'authData'}));
-app.use(apiSetCurrentUser);
+app.use(AuthController);
+app.use(jwt({
+  'secret': process.env.JWT_SECRET ?? 'NoSecrets',
+  'algorithms': ['HS256'],
+}));
+
+app.get('/hello', (req: Request, res: Response) => {
+  res.send('Hello World!');
+});
 
 app.listen(3000, () => console.log('Listening on Port 3000'));
