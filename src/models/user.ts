@@ -3,18 +3,11 @@
 'use strict';
 
 import {Sequelize} from 'sequelize';
-
 import {Model} from 'sequelize';
-
 import bcrypt from 'bcrypt';
-const PASSWORD_SALT_ROUNDS = 11;
+import UserAttributes from '../interfaces/user';
 
-interface UserAttributes {
-  id: number,
-  name: string,
-  email: string,
-  password: string,
-}
+const PASSWORD_SALT_ROUNDS = 11;
 
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
   class User extends Model<UserAttributes> implements UserAttributes {
