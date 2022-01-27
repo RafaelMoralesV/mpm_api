@@ -20,7 +20,11 @@ app.use('/auth', AuthController);
 app.use(jwt({
   'secret': process.env.JWT_SECRET ?? 'NoSecrets',
   'algorithms': ['HS256'],
-}));
+}), (err: any, req: Request, res: Response, next: any) => {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).send('Invalid token.').end();
+  }
+});
 
 app.get('/hello', (req: Request, res: Response) => {
   res.send('Hello World!');
