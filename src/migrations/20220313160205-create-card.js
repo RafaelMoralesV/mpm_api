@@ -1,15 +1,26 @@
 'use strict';
-
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('CollectionEntries', {
+    await queryInterface.createTable('Cards', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      userId: {
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      uuid: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      stock: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+      },
+      UserId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -17,14 +28,6 @@ module.exports = {
           key: 'id',
         },
         onDelete: 'CASCADE',
-      },
-      cardId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-      },
-      stock: {
-        type: Sequelize.INTEGER,
-        defaultValue: 1,
       },
       createdAt: {
         allowNull: false,
@@ -37,6 +40,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('CollectionEntries');
+    await queryInterface.dropTable('Cards');
   },
 };

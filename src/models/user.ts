@@ -23,7 +23,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
      */
     static associate(models: any) {
       // define association here
-      // this.hasMany()
+      this.hasMany(models.Card);
     }
     async checkPassword(password: string) {
       return bcrypt.compare(password, this.password);
