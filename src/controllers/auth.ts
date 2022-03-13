@@ -26,6 +26,11 @@ function generateToken(user: UserAttributes): Promise<String> {
 // POST /auth/login
 router.post('/login', async (req: Request, res: Response) => {
   const {username, password} = req.body;
+
+  if (!username || !password) {
+    return res.status(401).send('One or more fields missing.');
+  }
+
   const user = await db.User.findOne({where: {name: username}});
 
   if (!user) {
@@ -48,11 +53,15 @@ router.post('/login', async (req: Request, res: Response) => {
 
 
 // POST /auth/register
-router.post('/register', (req: Request, res: Response) => {
+router.post('/register', async (req: Request, res: Response) => {
   const {username, password, email}:
   {username:string, password:string, email:string} = req.body;
 
-  if (db.User.findOne({where: {email}})) {
+  if (!username || !password || !email) {
+    return res.status(401).send('One or more fields missing.');
+  }
+
+  if (await db.User.findOne({where: {email}})) {
     return res.status(401).send('A user with this email already exists');
   }
 

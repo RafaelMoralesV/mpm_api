@@ -14,6 +14,9 @@ app.use(express.json());
 // Auth routes
 app.use('/auth', AuthController);
 
+app.get('/hola', (req: Request, res: Response) => {
+  res.send('Hola Mundo!');
+});
 
 // de aqui en adelante los endpoints
 // requieren un JSON Web TOKEN de un usuario logueado.
