@@ -15,7 +15,7 @@ const router: Router = express.Router();
 function generateToken(user: UserAttributes): Promise<String> {
   return new Promise((resolve, reject) => {
     jwtgenerator.sign(
-        {sub: user.id},
+        {id: user.id},
         process.env.JWT_SECRET ?? 'NoSecrets',
         {expiresIn: '1h'},
         (err, tokenResult) => tokenResult ? resolve(tokenResult) : reject(err),

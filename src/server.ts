@@ -2,6 +2,7 @@ import express, {Express, Request, Response} from 'express';
 import jwt from 'express-jwt';
 
 import AuthController from './controllers/auth';
+import CardController from './controllers/cards';
 
 const app: Express = express();
 
@@ -28,6 +29,8 @@ app.use(jwt({
     res.status(401).send('Invalid token.').end();
   }
 });
+
+app.use('/cards', CardController);
 
 app.get('/hello', (req: Request, res: Response) => {
   res.send('Hello World!');
