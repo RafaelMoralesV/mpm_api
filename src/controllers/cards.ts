@@ -19,6 +19,7 @@ router.get('/', async (req: Request, res: Response) => {
   });
 });
 
+
 router.get('/:userID', async (req: Request, res: Response) => {
   const collection: Array<CardAttributes> =
       await db.Card.findAll({user_id: req.query.user_id});
@@ -29,6 +30,25 @@ router.get('/:userID', async (req: Request, res: Response) => {
       size: collection.length,
       collection: collection,
     },
+  });
+});
+
+
+router.post('/', async (req: Request, res: Response) => {
+  const user = await db.User.findOne(req.user);
+  const {name, uuid, stock} = req.body;
+
+  db.Card.create({
+    name: name,
+    uuid: uuid,
+    stock: stock,
+    UserId: user.id,
+    // UserId: req.user.id,
+  });
+
+  return res.json({
+    status: 200,
+    message: 'La carta se agregó con éxito.',
   });
 });
 
