@@ -13,4 +13,10 @@ npm i
 cp .env.example .env
 ```
 
-Luego edita el archivo .env con tus datos de coneccion a la base de datos, y una frase para el secreto de tu token JWT
+Luego edita el archivo .env con tus datos de conexión a la base de datos, y una frase para el secreto de tu token JWT
+
+Para poder migrar las tablas de la base de dato, ejecuta el siguiente comando:
+
+```
+npx sequelize-cli db:migrate
+```
