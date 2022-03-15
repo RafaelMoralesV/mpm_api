@@ -1,4 +1,4 @@
-import {request, Request, Response, Router} from 'express';
+import {Request, Response, Router} from 'express';
 import express from 'express';
 import db from '../models';
 import CardAttributes from '../interfaces/card';
@@ -32,30 +32,31 @@ router.get('/:userID', async (req: Request, res: Response) => {
     },
   });
 });
+
+
 router.put('/', async (req: Request, res: Response) =>{
- const user= await db.User.findOne(req.user);
- const{stock, id}= req.body;
- db.Card.update({stock: stock}, {where: {id:id, UserId: user.id}, fields: ["stock"]});
- return res.json({
-   status:200,
-   message: 'Stock de la carta actualizado',
+  const user= await db.User.findOne(req.user);
+  const {stock, id}= req.body;
+  db.Card.update(
+      {stock: stock},
+      {where: {id: id, UserId: user.id}, fields: ['stock']},
+  );
+  return res.json({
+    status: 200,
+    message: 'Stock de la carta actualizado',
 
- });
-
-
+  });
 });
 
 
 router.post('/', async (req: Request, res: Response) => {
-  const user = await db.User.findOne(req.user);
   const {name, uuid, stock} = req.body;
 
   db.Card.create({
     name: name,
     uuid: uuid,
     stock: stock,
-    UserId: user.id,
-    // UserId: req.user.id,
+    UserId: req.user?.id,
   });
 
   return res.json({
