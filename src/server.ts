@@ -1,10 +1,10 @@
-import express, {Express, Request, Response} from 'express';
+import express, {Application, Request, Response} from 'express';
 import jwt from 'express-jwt';
 
 import AuthController from './controllers/auth';
 import CardController from './controllers/cards';
 
-const app: Express = express();
+const app: Application = express();
 
 // parse application/x-www-form-urlencoded
 app.use(express.urlencoded({extended: false}));
@@ -22,7 +22,7 @@ app.get('/hola', (req: Request, res: Response) => {
 // de aqui en adelante los endpoints
 // requieren un JSON Web TOKEN de un usuario logueado.
 app.use(jwt({
-  'secret': process.env.JWT_SECRET ?? 'NoSecrets',
+  'secret': process.env.JWT_SECRET,
   'algorithms': ['HS256'],
 }), (err: any, req: Request, res: Response, next: any) => {
   if (err.name === 'UnauthorizedError') {
