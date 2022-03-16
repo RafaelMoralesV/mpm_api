@@ -1,15 +1,15 @@
-import {request, Request, Response, Router} from 'express';
+import {Request, Response, Router} from 'express';
 import express from 'express';
 import db from '../models';
-import CardAttributes from '../interfaces/card';
+import {Card} from '../models/card';
 
 // eslint-disable-next-line new-cap
 const router: Router = express.Router();
 
 // GET / - Obtiene una lista de todas las cartas.
 router.get('/', async (req: Request, res: Response) => {
-  const collection: Array<CardAttributes> =
-        await db.Card.findAll({user_id: req.user});
+  const collection: Array<Card> =
+        await db.Card.findAll({where: {UserId: req.user!.id}});
   return res.json({
     status: 200,
     data: {
@@ -21,8 +21,8 @@ router.get('/', async (req: Request, res: Response) => {
 
 
 router.get('/:userID', async (req: Request, res: Response) => {
-  const collection: Array<CardAttributes> =
-      await db.Card.findAll({user_id: req.query.user_id});
+  const collection: Array<Card> =
+      await db.Card.findAll({where: {UserId: req.query.user_id}});
 
   return res.json({
     status: 200,
@@ -32,30 +32,39 @@ router.get('/:userID', async (req: Request, res: Response) => {
     },
   });
 });
+
+
 router.put('/', async (req: Request, res: Response) =>{
- const user= await db.User.findOne(req.user);
- const{stock, id}= req.body;
- db.Card.update({stock: stock}, {where: {id:id, UserId: user.id}, fields: ["stock"]});
- return res.json({
-   status:200,
-   message: 'Stock de la carta actualizado',
+  const user = await db.User.findOne({where: {id: req.user!.id}});
 
- });
+  if (!user) {
+    return res.status(401).json({
+      status: 401,
+      message: 'No se ha podido verificar tu usuario',
+    });
+  }
 
+  const {stock, id}= req.body;
+  db.Card.update(
+      {stock: stock},
+      {where: {id: id, UserId: user.id}, fields: ['stock']},
+  );
+  return res.json({
+    status: 200,
+    message: 'Stock de la carta actualizado',
 
+  });
 });
 
 
 router.post('/', async (req: Request, res: Response) => {
-  const user = await db.User.findOne(req.user);
   const {name, uuid, stock} = req.body;
 
   db.Card.create({
     name: name,
     uuid: uuid,
     stock: stock,
-    UserId: user.id,
-    // UserId: req.user.id,
+    UserId: req.user!.id,
   });
 
   return res.json({
