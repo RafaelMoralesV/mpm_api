@@ -2,7 +2,6 @@ import {Request, Response, Router} from 'express';
 import jwtgenerator from 'jsonwebtoken';
 import db from '../models';
 import express from 'express';
-import UserAttributes from '../interfaces/user';
 
 // eslint-disable-next-line new-cap
 const router: Router = express.Router();
@@ -12,7 +11,7 @@ const router: Router = express.Router();
  * @param {UserAttributes} user
  * @return {Promise<String>}
  */
-function generateToken(user: UserAttributes): Promise<String> {
+function generateToken(user: any): Promise<String> {
   return new Promise((resolve, reject) => {
     jwtgenerator.sign(
         {id: user.id},
