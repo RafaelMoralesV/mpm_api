@@ -27,18 +27,27 @@ router.post('/login', async (req: Request, res: Response) => {
   const {username, password} = req.body;
 
   if (!username || !password) {
-    return res.status(401).send('One or more fields missing.');
+    return res.status(401).json({
+      status: 401,
+      message: 'One or more fields missing.',
+    });
   }
 
   const user = await db.User.findOne({where: {name: username}});
 
   if (!user) {
-    return res.status(404).send(`No user found with username ${username}`);
+    return res.status(404).json({
+      status: 404,
+      message: `No user found with username ${username}`,
+    });
   }
 
   const authenticated = await user.checkPassword(password);
   if (!authenticated) {
-    return res.status(401).send('Invalid password');
+    return res.status(401).json({
+      status: 401,
+      message: 'Invalid password',
+    });
   }
 
   const token = await generateToken(user);
@@ -57,11 +66,17 @@ router.post('/register', async (req: Request, res: Response) => {
   {username:string, password:string, email:string} = req.body;
 
   if (!username || !password || !email) {
-    return res.status(401).send('One or more fields missing.');
+    return res.status(400).json({
+      status: 400,
+      message: 'One or more fields missing.',
+    });
   }
 
   if (await db.User.findOne({where: {email}})) {
-    return res.status(401).send('A user with this email already exists');
+    return res.status(400).json({
+      status: 400,
+      message: 'A user with this email already exists',
+    });
   }
 
   db.User.create({
@@ -70,7 +85,10 @@ router.post('/register', async (req: Request, res: Response) => {
     email: email,
   });
 
-  res.send('OK');
+  res.json({
+    status: 200,
+    message: 'El usuario fue creado correctamente.',
+  });
 });
 
 export default router;

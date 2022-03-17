@@ -8,12 +8,16 @@ const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/database.js')[env];
 
 
-const sequelize: Sequelize = new Sequelize(
+const sequelize: Sequelize = env === 'test' ?
+new Sequelize('sqlite::memory:', {logging: console.log}) :
+new Sequelize(
     config.database,
     config.username,
     config.password,
     config,
 );
+
+sequelize.sync();
 
 const db = {
   sequelize,
@@ -27,5 +31,6 @@ Object.values(db).forEach((model: any) => {
     model.associate(db);
   }
 });
+
 
 export default db;
