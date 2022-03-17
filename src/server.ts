@@ -28,6 +28,13 @@ app.get('/hello',
       res.send({message: 'Hello World!'});
     });
 
+app.get('*', function(req, res) {
+  res.status(404).json({
+    status: 404,
+    message: 'The data requested could not be found',
+  });
+});
+
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err.name === 'UnauthorizedError') {
     return res.status(401).json({
