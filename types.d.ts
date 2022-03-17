@@ -6,6 +6,8 @@ declare namespace Express {
 }
 declare namespace NodeJS {
     export interface ProcessEnv {
+        NODE_ENV: 'development' | 'production' | 'testing';
+
         DB_USER: string;
         DB_PASS: string | null;
         DB_HOST: string;

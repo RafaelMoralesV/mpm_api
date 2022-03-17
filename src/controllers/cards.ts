@@ -2,9 +2,13 @@ import {Request, Response, Router} from 'express';
 import express from 'express';
 import db from '../models';
 import {Card} from '../models/card';
+import jwt from 'express-jwt';
 
 // eslint-disable-next-line new-cap
 const router: Router = express.Router();
+
+// Estas rutas estan protegidas bajo un JWT.
+router.use(jwt({'secret': process.env.JWT_SECRET, 'algorithms': ['HS256']}));
 
 // GET / - Obtiene una lista de todas las cartas.
 router.get('/', async (req: Request, res: Response) => {
