@@ -4,3 +4,6 @@ node_modules
 
 # Enviroment file. Use .env.example to create your own.
 .env
+
+# Test coverage.
+coverage
