@@ -1,4 +1,5 @@
 import express, {Application, NextFunction, Request, Response} from 'express';
+import jwt from 'express-jwt';
 
 import AuthController from './controllers/auth';
 import CardController from './controllers/cards';
@@ -16,14 +17,16 @@ app.use(express.json());
 app.use('/auth', AuthController);
 
 app.get('/hola', (req: Request, res: Response) => {
-  res.send('Hola Mundo!');
+  res.json({message: 'Hola Mundo!'});
 });
 
 app.use('/cards', CardController);
 
-app.get('/hello', (req: Request, res: Response) => {
-  res.send('Hello World!');
-});
+app.get('/hello',
+    jwt({'secret': process.env.JWT_SECRET, 'algorithms': ['HS256']}),
+    (req: Request, res: Response) => {
+      res.send({message: 'Hello World!'});
+    });
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err.name === 'UnauthorizedError') {
@@ -39,4 +42,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-app.listen(3000, () => console.log('Listening on Port 3000'));
+export const server =
+  app.listen(3000, () => console.log('Listening on Port 3000'));
+
+export default app;

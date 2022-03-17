@@ -4,7 +4,7 @@
   "description": "API for the MPM flutter application",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage --watchAll --verbose --detectOpenHandles --silent",
     "dev": "nodemon src/server.ts",
     "build": "rm -rf build/ && prettier --write source/ && tsc",
     "migrate": "nodemon src/migrations/user_table.ts"
@@ -37,6 +37,7 @@
     "@types/express-jwt": "^6.0.4",
     "@types/jest": "^27.4.1",
     "@types/jsonwebtoken": "^8.5.8",
+    "@types/supertest": "^2.0.11",
     "@types/validator": "^13.7.1",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
@@ -49,6 +50,8 @@
     "eslint-plugin-promise": "^5.2.0",
     "jest": "^27.5.1",
     "sequelize-cli": "^6.4.1",
+    "supertest": "^6.2.2",
+    "ts-jest": "^27.1.3",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.2"
   }
