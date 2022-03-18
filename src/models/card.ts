@@ -8,8 +8,10 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  NonAttribute,
 } from 'sequelize';
 import {Model} from 'sequelize';
+import {User} from './user';
 
 export class Card extends Model<
   InferAttributes<Card>,
@@ -21,6 +23,7 @@ export class Card extends Model<
   declare stock: number;
   declare UserId: number;
 
+  declare user?: NonAttribute<User>;
 
   /**
    * Helper method for defining associations.

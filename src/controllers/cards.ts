@@ -24,9 +24,9 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 
-router.get('/:userID', async (req: Request, res: Response) => {
+router.get('/:userId', async (req: Request, res: Response) => {
   const collection: Array<Card> =
-      await db.Card.findAll({where: {UserId: req.query.user_id}});
+      await db.Card.findAll({where: {UserId: req.params.userId}});
 
   return res.json({
     status: 200,
@@ -56,7 +56,6 @@ router.put('/', async (req: Request, res: Response) =>{
   return res.json({
     status: 200,
     message: 'Stock de la carta actualizado',
-
   });
 });
 

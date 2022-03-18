@@ -12,21 +12,19 @@ app.use(express.urlencoded({extended: false}));
 // parse application/json
 app.use(express.json());
 
+// Basic and test routes.
+app.get('/hola',
+    (req: Request, res: Response) => res.json({message: 'Hola Mundo!'}));
+
+app.get('/hello',
+    jwt({'secret': process.env.JWT_SECRET, 'algorithms': ['HS256']}),
+    (req: Request, res: Response) => res.json({message: 'Hello World!'}));
 
 // Auth routes
 app.use('/auth', AuthController);
 
-app.get('/hola', (req: Request, res: Response) => {
-  res.json({message: 'Hola Mundo!'});
-});
-
 app.use('/cards', CardController);
 
-app.get('/hello',
-    jwt({'secret': process.env.JWT_SECRET, 'algorithms': ['HS256']}),
-    (req: Request, res: Response) => {
-      res.send({message: 'Hello World!'});
-    });
 
 app.get('*', function(req, res) {
   res.status(404).json({

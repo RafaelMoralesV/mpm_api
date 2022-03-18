@@ -8,9 +8,20 @@ import {
   InferCreationAttributes,
   CreationOptional,
   DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  NonAttribute,
 } from 'sequelize';
 import {Model} from 'sequelize';
 import bcrypt from 'bcrypt';
+import {Card} from './card';
 
 const PASSWORD_SALT_ROUNDS = 11;
 
@@ -26,6 +37,18 @@ export class User
 
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
+
+  declare getCards: HasManyGetAssociationsMixin<Card>;
+  declare addCard: HasManyAddAssociationMixin<Card, number>;
+  declare addCards: HasManySetAssociationsMixin<Card, number>;
+  declare removeCard: HasManyRemoveAssociationMixin<Card, number>;
+  declare removeCards: HasManyRemoveAssociationsMixin<Card, number>;
+  declare hasCard: HasManyHasAssociationMixin<Card, number>;
+  declare hasCards: HasManyHasAssociationsMixin<Card, number>;
+  declare countCards: HasManyCountAssociationsMixin;
+  declare createCard: HasManyCreateAssociationMixin<Card, 'UserId'>;
+
+  declare cards?: NonAttribute<Card[]>;
 
   /**
      * Helper method for defining associations.
