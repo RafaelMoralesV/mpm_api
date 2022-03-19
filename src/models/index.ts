@@ -3,6 +3,7 @@
 import {Sequelize} from 'sequelize';
 import userFactory from './user';
 import cardFactory from './card';
+import userUserFactory from './useruser';
 
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/database.js')[env];
@@ -23,6 +24,7 @@ const db = {
   Sequelize,
   User: userFactory(sequelize),
   Card: cardFactory(sequelize),
+  UserUser: userUserFactory(sequelize),
 };
 
 Object.values(db).forEach((model: any) => {

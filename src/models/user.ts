@@ -18,10 +18,12 @@ import {
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
   NonAttribute,
+  Association,
 } from 'sequelize';
 import {Model} from 'sequelize';
 import bcrypt from 'bcrypt';
 import {Card} from './card';
+import {UserUser} from './useruser';
 
 const PASSWORD_SALT_ROUNDS = 11;
 
@@ -38,6 +40,7 @@ export class User
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
+  // Card assosiation
   declare getCards: HasManyGetAssociationsMixin<Card>;
   declare addCard: HasManyAddAssociationMixin<Card, number>;
   declare addCards: HasManySetAssociationsMixin<Card, number>;
@@ -50,6 +53,25 @@ export class User
 
   declare cards?: NonAttribute<Card[]>;
 
+  // Friends assosiation
+  declare getFriends: HasManyGetAssociationsMixin<User>;
+  declare addFriend: HasManyAddAssociationMixin<User, number>;
+  declare addFriends: HasManySetAssociationsMixin<User, number>;
+  declare removeFriend: HasManyRemoveAssociationMixin<User, number>;
+  declare removeFriends: HasManyRemoveAssociationsMixin<User, number>;
+  declare hasFriend: HasManyHasAssociationMixin<User, number>;
+  declare hasFriends: HasManyHasAssociationsMixin<User, number>;
+  declare countFriends: HasManyCountAssociationsMixin;
+  declare createFriend: HasManyCreateAssociationMixin<UserUser, 'userID2'>;
+
+  declare friends?: NonAttribute<User[]>;
+
+  declare static associations: {
+    cards: Association<User, Card>;
+    friends: Association<User, User>;
+  };
+
+
   /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -58,6 +80,12 @@ export class User
   static associate(models: any) {
     // define association here
     this.hasMany(models.Card);
+    this.belongsToMany(User, {
+      as: 'friends',
+      through: 'UserUsers',
+      foreignKey: 'userID1',
+      otherKey: 'userID1',
+    });
   }
   async checkPassword(password: string) {
     return bcrypt.compare(password, this.password);
