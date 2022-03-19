@@ -4,9 +4,9 @@
   "description": "API for the MPM flutter application",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage --watchAll --verbose --detectOpenHandles --silent",
-    "dev": "nodemon src/server.ts",
-    "build": "rm -rf build/ && prettier --write source/ && tsc",
+    "test": "cross-env NODE_ENV=test jest --coverage --watchAll --verbose --detectOpenHandles --silent",
+    "dev": "cross-env NODE_ENV=development nodemon src/server.ts",
+    "build": "cross-env NODE_ENV=production rm -rf build/ && prettier --write source/ && tsc",
     "migrate": "nodemon src/migrations/user_table.ts"
   },
   "keywords": [
@@ -25,8 +25,7 @@
     "jsonwebtoken": "^8.5.1",
     "mariadb": "^2.5.5",
     "nodemon": "^2.0.15",
-    "sequelize": "^6.14.0",
-    "umzug": "^3.0.0"
+    "sequelize": "^6.14.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
@@ -43,6 +42,7 @@
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "babel-jest": "^27.5.1",
+    "cross-env": "^7.0.3",
     "eslint": "^8.7.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-standard": "^16.0.3",

@@ -17,7 +17,6 @@ new Sequelize(
     config,
 );
 
-sequelize.sync();
 
 const db = {
   sequelize,
@@ -32,5 +31,8 @@ Object.values(db).forEach((model: any) => {
   }
 });
 
+if (env === 'test') {
+  sequelize.sync();
+}
 
 export default db;
