@@ -3,6 +3,7 @@ import jwt from 'express-jwt';
 
 import AuthController from './controllers/auth';
 import CardController from './controllers/cards';
+import UserController from './controllers/users';
 
 const app: Application = express();
 
@@ -23,8 +24,11 @@ app.get('/hello',
 // Auth routes
 app.use('/auth', AuthController);
 
+// Collection routes
 app.use('/cards', CardController);
 
+// User routes
+app.use('/users', UserController);
 
 app.get('*', function(req, res) {
   res.status(404).json({
