@@ -1,26 +1,13 @@
 import {Request, Response, Router} from 'express';
-import jwtgenerator from 'jsonwebtoken';
-import db from '../models';
 import express from 'express';
+
+import {PrismaClient} from '@prisma/client';
+import bcrypt from 'bcrypt';
+import {generateToken} from '../lib/utils';
+const prisma = new PrismaClient();
 
 // eslint-disable-next-line new-cap
 const router: Router = express.Router();
-
-/**
- * Generates a new JWT Token.
- * @param {UserAttributes} user
- * @return {Promise<String>}
- */
-function generateToken(user: any): Promise<String> {
-  return new Promise((resolve, reject) => {
-    jwtgenerator.sign(
-        {id: user.id},
-        process.env.JWT_SECRET,
-        {},
-        (err, tokenResult) => tokenResult ? resolve(tokenResult) : reject(err),
-    );
-  });
-}
 
 // POST /auth/login
 router.post('/login', async (req: Request, res: Response) => {
@@ -33,7 +20,7 @@ router.post('/login', async (req: Request, res: Response) => {
     });
   }
 
-  const user = await db.User.findOne({where: {name: username}});
+  const user = await prisma.user.findFirst({where: {name: username}});
 
   if (!user) {
     return res.status(404).json({
@@ -42,21 +29,18 @@ router.post('/login', async (req: Request, res: Response) => {
     });
   }
 
-  const authenticated = await user.checkPassword(password);
-  if (!authenticated) {
+  if (!bcrypt.compareSync(password, user.password)) {
     return res.status(401).json({
       status: 401,
       message: 'Invalid password',
     });
   }
 
-  const token = await generateToken(user);
-
-  res.json({
-    id: user.id,
-    access_token: token,
-    token_type: 'Bearer',
-  });
+  res.header('auth-token', `Bearer ${generateToken(user)}`)
+      .json({
+        status: 200,
+        message: 'user created sucessfully',
+      });
 });
 
 
@@ -72,18 +56,21 @@ router.post('/register', async (req: Request, res: Response) => {
     });
   }
 
-  if (await db.User.findOne({where: {email}})) {
+  if (await prisma.user.findFirst({where: {email: email}})) {
     return res.status(400).json({
       status: 400,
       message: 'A user with this email already exists',
     });
   }
 
-  db.User.create({
-    name: username,
-    password: password,
-    email: email,
-  });
+  await prisma.user.create({
+    data: {
+      name: username,
+      password: password,
+      email: email,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }});
 
   res.json({
     status: 200,
